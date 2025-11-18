@@ -35,5 +35,10 @@ configure = { cmd = [
 build = { cmd = "cmake --build build --target all", depends-on = ["configure"] }
 clean = { cmd = "rm -rf build" }
 
+# add boost python binding
+[feature.boostpybinding]
+dependencies = { libboost-python-devel = "*", eigenpy = "*" }
+activation = { env = { WITH_BOOST_PY_BINDING = "ON", PYTHONPATH = "$PYTHONPATH:${PIXI_PROJECT_ROOT}/build/python" } }
+
 [environments]
-default = []
+default = { features = ["boostpybinding"] }
