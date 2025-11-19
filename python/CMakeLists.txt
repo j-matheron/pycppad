@@ -36,6 +36,16 @@ SET(${PYTHON_LIB_NAME}_SOURCES
    ${CMAKE_SOURCE_DIR}/src/expose-type-double-row-major.cpp
 )
 
+IF(BUILD_WITH_CPPAD_CODEGEN_BINDINGS)
+  LIST(APPEND ${PYTHON_LIB_NAME}_HEADERS
+        ${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/codegen/cg.hpp
+        ${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/codegen/cppadcg-scalar.hpp
+        ${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/codegen/code-handler.hpp
+        ${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/codegen/lang/c/language-c.hpp
+        ${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/codegen/lang/c/lang-c-default-var-name-gen.hpp
+  )
+ENDIF()
+
 ADD_LIBRARY(${PYTHON_LIB_NAME} MODULE ${${PYTHON_LIB_NAME}_HEADERS} ${${PYTHON_LIB_NAME}_SOURCES})
 
 IF(SUFFIX_SO_VERSION)
@@ -54,6 +64,14 @@ TARGET_LINK_LIBRARIES(
  ${PYTHON_LIB_NAME} PUBLIC ${cppad_LIBRARY} eigenpy::eigenpy)
 
 TARGET_LINK_BOOST_PYTHON(${PYTHON_LIB_NAME} PUBLIC)
+
+IF(BUILD_WITH_CPPAD_CODEGEN_BINDINGS)
+    TARGET_INCLUDE_DIRECTORIES(${PYTHON_LIB_NAME}
+    SYSTEM PUBLIC 
+    ${cppadcg_INCLUDE_DIR}
+    )
+  TARGET_LINK_LIBRARIES(${PYTHON_LIB_NAME} PUBLIC ${CMAKE_DL_LIBS})
+ENDIF()
 
 # BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS spews conversion warnings from int to long unsigned int.
 # Unfortunately, using literals does not work in a macro. As such, this turns them off for the entire wrapper:

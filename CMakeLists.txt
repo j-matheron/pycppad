@@ -66,6 +66,8 @@ ADD_PROJECT_DEPENDENCY(Boost REQUIRED)
 EXPORT_BOOST_DEFAULT_OPTIONS()
 
 IF(BUILD_WITH_CPPAD_CODEGEN_BINDINGS)
+  message(STATUS "Python bindings for code generation enabled")
+
   ADD_PROJECT_DEPENDENCY(cppadcg 2.4.1 REQUIRED PKG_CONFIG_REQUIRES "cppadcg >= 2.4.1" FIND_EXTERNAL "CppAD") # CppADCodeGen 2.4.1 is the first version to check the minimal version of CppAD
   ADD_DEFINITIONS(-DPYCPPAD_WITH_CPPAD_CODEGEN_BINDINGS)
 ENDIF(BUILD_WITH_CPPAD_CODEGEN_BINDINGS)
@@ -73,7 +75,11 @@ ENDIF(BUILD_WITH_CPPAD_CODEGEN_BINDINGS)
 ADD_PROJECT_DEPENDENCY(cppad 20180000.0 REQUIRED PKG_CONFIG_REQUIRES "cppad >= 20180000.0" FIND_EXTERNAL "CppAD")
 ADD_PROJECT_DEPENDENCY(Eigen3 REQUIRED PKG_CONFIG_REQUIRES "eigen3 >= 3.0.5")
 
+OPTION(WITH_BOOST_PY_BINDING "Builds a binding with boost python" OFF)
+
 if(WITH_BOOST_PY_BINDING)
+  message(STATUS "Python binding enabled")
+
   SET(PYTHON_COMPONENTS Interpreter Development NumPy)
   FINDPYTHON(REQUIRED)
   ADD_PROJECT_DEPENDENCY(eigenpy 2.7.14 REQUIRED) 
@@ -86,25 +92,6 @@ set(${PROJECT_NAME}_HEADERS
     ${${PROJECT_NAME}_BINARY_DIR}/include/${PROJECT_NAME}/deprecated.hpp
     ${${PROJECT_NAME}_BINARY_DIR}/include/${PROJECT_NAME}/warning.hpp
 )
-
-IF(BUILD_WITH_CPPAD_CODEGEN_BINDINGS)
-  LIST(APPEND ${PROJECT_NAME}_HEADERS
-        include/${PROJECT_NAME}/codegen/cg.hpp
-        include/${PROJECT_NAME}/codegen/cppadcg-scalar.hpp
-        include/${PROJECT_NAME}/codegen/code-handler.hpp
-        include/${PROJECT_NAME}/codegen/lang/c/language-c.hpp
-        include/${PROJECT_NAME}/codegen/lang/c/lang-c-default-var-name-gen.hpp
-    )
-ENDIF(BUILD_WITH_CPPAD_CODEGEN_BINDINGS)
-
-IF(BUILD_WITH_CPPAD_CODEGEN_BINDINGS)
-    TARGET_INCLUDE_DIRECTORIES(${PROJECT_NAME}
-        SYSTEM PUBLIC 
-        ${cppadcg_INCLUDE_DIR}
-    )
-  TARGET_LINK_LIBRARIES(${PROJECT_NAME} PUBLIC ${CMAKE_DL_LIBS})
-ENDIF(BUILD_WITH_CPPAD_CODEGEN_BINDINGS)
-
 
 ADD_SUBDIRECTORY(example)
 

@@ -7,7 +7,6 @@ version = "0.1.0"
 [dependencies]
 libboost-devel = "*"
 cppad = "*"
-cppadcodegen = "*"
 cmake = "*"
 pkg-config = "*"
 ninja = "*"
@@ -29,7 +28,8 @@ configure = { cmd = [
     "-S",
     ".",
     "-DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX",
-    "-DWITH_BOOST_PY_BINDING=$WITH_BOOST_PY_BINDING",
+    "-DBUILD_WITH_CPPAD_CODEGEN_BINDINGS=$BUILD_WITH_CPPAD_CODEGEN_BINDINGS=OFF",
+    "-DWITH_BOOST_PY_BINDING=$WITH_BOOST_PY_BINDING=OFF",
 
 ] }
 build = { cmd = "cmake --build build --target all", depends-on = ["configure"] }
@@ -40,5 +40,11 @@ clean = { cmd = "rm -rf build" }
 dependencies = { libboost-python-devel = "*", eigenpy = "*" }
 activation = { env = { WITH_BOOST_PY_BINDING = "ON", PYTHONPATH = "$PYTHONPATH:${PIXI_PROJECT_ROOT}/build/python" } }
 
+# add python binding for code generation
+[feature.cppadcg-binding]
+dependencies = { cppadcodegen = "*" }
+activation = { env = { BUILD_WITH_CPPAD_CODEGEN_BINDINGS = "ON" } }
+
 [environments]
 default = { features = ["boostpybinding"] }
+cppadcg-binding = { features = ["boostpybinding", "cppadcg-binding"] }
