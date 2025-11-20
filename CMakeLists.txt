@@ -59,39 +59,71 @@ CHECK_MINIMAL_CXX_STANDARD(11 ENFORCE)
 
 # Project options
 OPTION(SUFFIX_SO_VERSION "Suffix library name with its version" ON)
-OPTION(BUILD_WITH_CPPAD_CODEGEN_BINDINGS "Build the python bindings for code generation (via CppADCodeGen)" OFF)
+OPTION(PYCCPAD_WITH_CPPAD_CODEGEN "Build the python bindings for code generation (via CppADCodeGen)" OFF)
+OPTION(PYCPPAD_WITH_BOOST_PYTHON "Builds a binding with boost python" OFF)
+OPTION(PYCPPAD_WITH_NANOBIND "Builds a binding with nanobind" OFF)
 
 SET_BOOST_DEFAULT_OPTIONS()
 ADD_PROJECT_DEPENDENCY(Boost REQUIRED)
 EXPORT_BOOST_DEFAULT_OPTIONS()
 
-IF(BUILD_WITH_CPPAD_CODEGEN_BINDINGS)
+IF(PYCCPAD_WITH_CPPAD_CODEGEN)
   message(STATUS "Python bindings for code generation enabled")
 
   ADD_PROJECT_DEPENDENCY(cppadcg 2.4.1 REQUIRED PKG_CONFIG_REQUIRES "cppadcg >= 2.4.1" FIND_EXTERNAL "CppAD") # CppADCodeGen 2.4.1 is the first version to check the minimal version of CppAD
-  ADD_DEFINITIONS(-DPYCPPAD_WITH_CPPAD_CODEGEN_BINDINGS)
-ENDIF(BUILD_WITH_CPPAD_CODEGEN_BINDINGS)
+ENDIF()
 
 ADD_PROJECT_DEPENDENCY(cppad 20180000.0 REQUIRED PKG_CONFIG_REQUIRES "cppad >= 20180000.0" FIND_EXTERNAL "CppAD")
 ADD_PROJECT_DEPENDENCY(Eigen3 REQUIRED PKG_CONFIG_REQUIRES "eigen3 >= 3.0.5")
 
-OPTION(WITH_BOOST_PY_BINDING "Builds a binding with boost python" OFF)
-
-if(WITH_BOOST_PY_BINDING)
-  message(STATUS "Python binding enabled")
+IF(PYCPPAD_WITH_BOOST_PYTHON)
+  message(STATUS "boost.python binding enabled")
 
   SET(PYTHON_COMPONENTS Interpreter Development NumPy)
   FINDPYTHON(REQUIRED)
   ADD_PROJECT_DEPENDENCY(eigenpy 2.7.14 REQUIRED) 
+
+  SET(${PROJECT_NAME}_HEADERS
+     ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/fwd.hpp
+     ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/ad.hpp
+     ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/independent.hpp
+     ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/ad_fun.hpp
+     ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/cast.hpp
+     ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/cppad.hpp
+     ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/cppad-scalar.hpp
+     ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/utils/scope.hpp)
+
+  IF(PYCCPAD_WITH_CPPAD_CODEGEN)
+      LIST(APPEND ${PROJECT_NAME}_HEADERS
+      ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/codegen/cg.hpp
+      ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/codegen/cppadcg-scalar.hpp
+      ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/codegen/code-handler.hpp
+      ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/codegen/lang/c/language-c.hpp
+      ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/codegen/lang/c/lang-c-default-var-name-gen.hpp
+  )
+  ENDIF()
+
   ADD_SUBDIRECTORY(python)
-endif()
+ENDIF()
 
 # Generated headers
-set(${PROJECT_NAME}_HEADERS
+LIST(APPEND (${PROJECT_NAME}_HEADERS
     ${${PROJECT_NAME}_BINARY_DIR}/include/${PROJECT_NAME}/config.hpp
     ${${PROJECT_NAME}_BINARY_DIR}/include/${PROJECT_NAME}/deprecated.hpp
-    ${${PROJECT_NAME}_BINARY_DIR}/include/${PROJECT_NAME}/warning.hpp
+    ${${PROJECT_NAME}_BINARY_DIR}/include/${PROJECT_NAME}/warning.hpp)
 )
+
+if(PYCPPAD_WITH_NANOBIND)
+  # find python for binding
+  find_package(Python 3.8 REQUIRED COMPONENTS Interpreter Development.Module)
+
+  # jrl-cmakemodules use PYTHON_EXECUTABLE defined in FINDPYTHON macro.
+  # Since we doesn't call it in this branch, we must redefine it.
+  set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
+
+  # add associated subidirectory
+  add_subdirectory(python-nb)
+endif()
 
 ADD_SUBDIRECTORY(example)
 

@@ -56,10 +56,10 @@ make install
 
 Set up the `path_to_your_installation` and `path_to_your_development_source` based on your personal development environment.
 
-Alternatively, to compile with [CppADCodeGen](https://github.com/joaoleal/CppADCodeGen) support, add `-DBUILD_WITH_CPPAD_CODEGEN_BINDINGS=ON` to the cmake command, and follow the build sequence as before:
+Alternatively, to compile with [CppADCodeGen](https://github.com/joaoleal/CppADCodeGen) support, add `-DPYCCPAD_WITH_CPPAD_CODEGEN=ON` to the cmake command, and follow the build sequence as before:
 
 ```
-cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=${path_to_your_installation} -DBUILD_WITH_CPPAD_CODEGEN_BINDINGS=ON
+cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=${path_to_your_installation} -DPYCCPAD_WITH_CPPAD_CODEGEN=ON
 ```
 
 ## Credits

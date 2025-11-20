@@ -5,18 +5,28 @@ platforms = ["linux-64"]
 version = "0.1.0"
 
 [dependencies]
-libboost-devel = "*"
-cppad = "*"
-cmake = "*"
-pkg-config = "*"
-ninja = "*"
-cxx-compiler = "*"
-clangxx = "*"
-doxygen = "*"
-python = "*"
+ccache = ">=4.11.3"
+cppad = ">=20240000.6"
+cmake = ">=3.15"
+pkg-config = ">=0.29.2"
+ninja = ">=1.13.1"
+cxx-compiler = ">=1.11.0"
+doxygen = ">=1.13.2"
+python = ">3.10.0"
+numpy = ">=2.2.6"
 
-[activation]
+[target.unix.activation]
 scripts = ["development/scripts/pixi/activation.sh"]
+
+[activation.env]
+# Setup ccache
+CMAKE_CXX_COMPILER_LAUNCHER = "ccache"
+# Create compile_commands.json for language server
+CMAKE_EXPORT_COMPILE_COMMANDS = "ON"
+# Activate color output with Ninja
+CMAKE_COLOR_DIAGNOSTICS = "ON"
+# Help ccache manage generated files and PCH (https://ccache.dev/manual/latest.html#_precompiled_headers)
+CCACHE_SLOPPINESS = "include_file_ctime,include_file_mtime,pch_defines,time_macros"
 
 [tasks]
 configure = { cmd = [
@@ -28,23 +38,49 @@ configure = { cmd = [
     "-S",
     ".",
     "-DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX",
-    "-DBUILD_WITH_CPPAD_CODEGEN_BINDINGS=$BUILD_WITH_CPPAD_CODEGEN_BINDINGS=OFF",
-    "-DWITH_BOOST_PY_BINDING=$WITH_BOOST_PY_BINDING=OFF",
+    "-DCMAKE_BUILD_TYPE=$PYCCPAD_BUILD_TYPE",
+    "-DPYCPPAD_WITH_BOOST_PYTHON=$PYCPPAD_WITH_BOOST_PYTHON",
+    "-DPYCPPAD_WITH_NANOBIND=$PYCPPAD_WITH_NANOBIND",
+    "-DPYCCPAD_WITH_CPPAD_CODEGEN=$PYCCPAD_WITH_CPPAD_CODEGEN",
+
 
 ] }
 build = { cmd = "cmake --build build --target all", depends-on = ["configure"] }
 clean = { cmd = "rm -rf build" }
 
 # add boost python binding
-[feature.boostpybinding]
-dependencies = { libboost-python-devel = "*", eigenpy = "*" }
-activation = { env = { WITH_BOOST_PY_BINDING = "ON", PYTHONPATH = "$PYTHONPATH:${PIXI_PROJECT_ROOT}/build/python" } }
+[feature.boost-python]
+dependencies = { libboost-python-devel = ">=1.88.0", eigenpy = ">=3.12.0" }
+activation = { env = { PYCPPAD_WITH_BOOST_PYTHON = "ON" } }
+
+# build with nanobind
+[feature.nanobind]
+dependencies = { nanobind = ">=2.5.0,<3" }
+activation = { env = { PYCPPAD_WITH_NANOBIND = "ON" } }
 
 # add python binding for code generation
-[feature.cppadcg-binding]
+[feature.cppadcg]
 dependencies = { cppadcodegen = "*" }
-activation = { env = { BUILD_WITH_CPPAD_CODEGEN_BINDINGS = "ON" } }
+activation = { env = { PYCCPAD_WITH_CPPAD_CODEGEN = "ON" } }
+
+[feature.python-latest.dependencies]
+python = "3.14.*"
+
+[feature.python-oldest.dependencies]
+python = "3.10.*"
 
 [environments]
-default = { features = ["boostpybinding"] }
-cppadcg-binding = { features = ["boostpybinding", "cppadcg-binding"] }
+default = { features = ["boost-python", "python-latest"] }
+cppadcg = { features = ["boost-python", "cppadcg", "python-latest"] }
+
+nanobind = { features = ["nanobind", "python-latest"] }
+nanobind-cppadcg = { features = ["nanobind", "cppadcg", "python-latest"] }
+
+all = { features = ["boost-python", "cppadcg", "python-latest"] }
+all-python-oldest = { features = ["boost-python", "cppadcg", "python-oldest"] }
+all-nanobind = { features = ["nanobind", "cppadcg", "python-latest"] }
+all-nanobind-python-oldest = { features = [
+    "nanobind",
+    "cppadcg",
+    "python-oldest",
+] }

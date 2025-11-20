@@ -9,7 +9,7 @@ endfunction()
 
 ADD_PYTHON_UNIT_TEST("${PROJECT_NAME}-add_eq" "example/add_eq.py" "python")
 ADD_WINDOWS_DLL_PATH_TO_TEST(${PROJECT_NAME}-add_eq)
-IF(BUILD_WITH_CPPAD_CODEGEN_BINDINGS)
+IF(PYCCPAD_WITH_CPPAD_CODEGEN)
   ADD_PYTHON_UNIT_TEST("${PROJECT_NAME}-cppadcg_c_codegen" "example/cppadcg_c_codegen.py" "python")
   ADD_WINDOWS_DLL_PATH_TO_TEST(${PROJECT_NAME}-cppadcg_c_codegen)
 ENDIF()
