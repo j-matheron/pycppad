@@ -1,3 +1,9 @@
+# Name of the Python library
+set(PYTHON_LIB_NAME_V2 ${PROJECT_NAME}_pywrap_nb)
+
+message("give the lib name " ${PYTHON_LIB_NAME_V2})
+
+
 # Detect the installed nanobind package and import it into CMake
   execute_process(
     COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
@@ -5,3 +11,97 @@
     OUTPUT_VARIABLE nanobind_ROOT)
 
   find_package(nanobind CONFIG REQUIRED)
+
+
+  MAKE_DIRECTORY("${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}")
+
+# add interface library
+ADD_LIBRARY(${PROJECT_NAME} INTERFACE ${${PROJECT_NAME}_SOURCES} )
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} INTERFACE ${cppad_LIBRARY} Boost::boost)
+
+# needs to specify install dir for export
+TARGET_INCLUDE_DIRECTORIES(${PROJECT_NAME} INTERFACE $<INSTALL_INTERFACE:include>)
+
+SET(${PYTHON_LIB_NAME_V2}_SOURCES
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/cppad.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/expose-type-double.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/expose-type-double-row-major.cpp
+)
+
+nanobind_add_module(${PYTHON_LIB_NAME_V2} ${${PYTHON_LIB_NAME_V2}_SOURCES})
+
+#target_compile_definitions(
+ # ${PYTHON_LIB_NAME_V2}
+ # PRIVATE COAL_PYTHON_LIBNAME=${PYTHON_LIB_NAME_V2}
+#)
+
+# target_include_directories
+target_include_directories(${PYTHON_LIB_NAME_V2} PRIVATE  
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
+    $<INSTALL_INTERFACE:include>)
+
+# link with project interface  
+TARGET_LINK_LIBRARIES(
+ ${PYTHON_LIB_NAME_V2} PUBLIC ${PROJECT_NAME})
+
+# BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS spews conversion warnings from int to long unsigned int.
+# Unfortunately, using literals does not work in a macro. As such, this turns them off for the entire wrapper:
+IF(NOT WIN32)
+  TARGET_COMPILE_OPTIONS(${PYTHON_LIB_NAME_V2} PRIVATE "-Wno-conversion")
+ENDIF()
+IF(IS_ABSOLUTE ${PYTHON_SITELIB})
+  SET(${PYTHON_LIB_NAME_V2}_INSTALL_DIR ${PYTHON_SITELIB}/${PROJECT_NAME})
+ELSE()
+  SET(${PYTHON_LIB_NAME_V2}_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${PYTHON_SITELIB}/${PROJECT_NAME})
+ENDIF()
+IF(WIN32)
+  TARGET_COMPILE_DEFINITIONS(${PYTHON_LIB_NAME_V2} PRIVATE NOMINMAX)
+  TARGET_LINK_LIBRARIES(${PYTHON_LIB_NAME_V2} PUBLIC ${PYTHON_LIBRARY})
+ENDIF(WIN32)
+
+ADD_HEADER_GROUP(${PROJECT_NAME}_HEADERS)
+ADD_SOURCE_GROUP(${PYTHON_LIB_NAME_V2}_SOURCES)
+
+SET_TARGET_PROPERTIES(
+    ${PYTHON_LIB_NAME_V2}
+    PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}"
+        # On Windows, shared library are treated as binary
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}"
+)
+
+IF(UNIX)
+  GET_RELATIVE_RPATH(
+    ${${PYTHON_LIB_NAME_V2}_INSTALL_DIR}
+    ${PYTHON_LIB_NAME_V2}_INSTALL_RPATH
+    )
+    set_target_properties(
+    ${PYTHON_LIB_NAME_V2}
+    PROPERTIES INSTALL_RPATH "${${PYTHON_LIB_NAME_V2}_INSTALL_RPATH}"
+    )
+ENDIF()
+
+
+INSTALL(TARGETS ${PROJECT_NAME}
+  EXPORT ${TARGETS_EXPORT_NAME}
+  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+
+INSTALL(
+    TARGETS ${PYTHON_LIB_NAME_V2}
+    DESTINATION ${${PYTHON_LIB_NAME_V2}_INSTALL_DIR}
+)
+
+# --- INSTALL SCRIPTS
+SET(PYTHON_FILES
+  __init__.py
+  windows_dll_manager.py
+  )
+
+FOREACH(python ${PYTHON_FILES})
+  PYTHON_BUILD(${PROJECT_NAME} ${python})
+  INSTALL(FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/pycppad/${python}"
+    DESTINATION ${${PYTHON_LIB_NAME_V2}_INSTALL_DIR})
+ENDFOREACH(python)
+

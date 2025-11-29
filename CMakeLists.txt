@@ -121,6 +121,16 @@ if(PYCPPAD_WITH_NANOBIND)
   # Since we doesn't call it in this branch, we must redefine it.
   set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 
+    SET(${PROJECT_NAME}_HEADERS
+     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/fwd.hpp
+     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/ad.hpp
+     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/independent.hpp
+     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/ad_fun.hpp
+     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/cast.hpp
+     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/cppad.hpp
+     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/cppad-scalar.hpp
+     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/utils/scope.hpp)
+
   # add associated subidirectory
   add_subdirectory(python-nb)
 endif()

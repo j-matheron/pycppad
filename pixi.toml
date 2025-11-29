@@ -55,7 +55,7 @@ activation = { env = { PYCPPAD_WITH_BOOST_PYTHON = "ON" } }
 
 # build with nanobind
 [feature.nanobind]
-dependencies = { nanobind = ">=2.5.0,<3" }
+dependencies = { nanobind = ">=2.5.0,<3", libboost-devel = ">=1.80.0", eigen = ">=3.4.0" }
 activation = { env = { PYCPPAD_WITH_NANOBIND = "ON" } }
 
 # add python binding for code generation
