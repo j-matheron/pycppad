@@ -8,6 +8,7 @@
 #include "pycppad/ad.hpp"
 #include "pycppad/ad_fun.hpp"
 #include "pycppad/independent.hpp"
+#include <nanobind/stl/bind_vector.h>
 
 // TODO uncomment when possible with nanobind
 // #include <eigenpy/eigenpy.hpp>
@@ -27,6 +28,8 @@ template <typename Scalar> void exposeCppADScalar(nb::module_ &m) {
   // TODO uncomment when possible with nanobind
   // eigenpy::exposeType<ADScalar>();
   // eigenpy::exposeType<ADScalar,Eigen::RowMajor>();
+
+  nb::bind_vector<ADVector>(m, "ADVector");
 
   pycppad::AD<Scalar>::expose(m);
   pycppad::ADFun<Scalar>::expose(m);

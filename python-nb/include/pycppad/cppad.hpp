@@ -5,6 +5,7 @@
 #ifndef __pycppad_cppad_hpp__
 #define __pycppad_cppad_hpp__
 
+#include "nanobind/nanobind.h"
 #include "pycppad/fwd.hpp"
 
 namespace pycppad {

@@ -8,6 +8,7 @@
 #include "nanobind/nanobind.h"
 #include "pycppad/fwd.hpp"
 #include <cstddef>
+#include <nanobind/stl/vector.h>
 
 namespace pycppad {
 namespace nb = nanobind;
@@ -31,10 +32,7 @@ public:
 
 private:
   static void Dependent(ADFunType &self, ADVector &x, ADVector &y) {
-    ADVector x_(x), y_(y);
-    self.Dependent(x_, y_);
-    x = x_;
-    y = y_;
+    self.Dependent(x, y);
   }
 
 public:
@@ -51,8 +49,7 @@ public:
             },
             nb::arg("x"), nb::arg("y"))
         .def("from_json", &ADFunType::from_json, nb::arg("json"))
-        // or
-        //.DEF_CLASS_FUNC(ADFunType,from_json)
+
         .def("size_order", &ADFunType::size_order)
         .def("Dependent", &Dependent, nb::arg("x"), nb::arg("y"))
 

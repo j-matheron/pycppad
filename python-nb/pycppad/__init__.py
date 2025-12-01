@@ -15,7 +15,7 @@
 try:
     from .pycppad_pywrap_nb import *
 
-    # from .pycppad_pywrap_nb import __version__, __raw_version__
+    from .pycppad_pywrap_nb import __version__, __raw_version__
 except ImportError:
     import platform
 
@@ -26,6 +26,6 @@ except ImportError:
             for p in get_dll_paths():
                 dll_dir_manager.add_dll_directory(p)
             from .pycppad_pywrap_nb import *
-        #  from .pycppad_pywrap_nb import __version__, __raw_version__
+        from .pycppad_pywrap_nb import __version__, __raw_version__
     else:
         raise

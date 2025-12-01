@@ -88,10 +88,8 @@ IF(PYCPPAD_WITH_BOOST_PYTHON)
      ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/ad.hpp
      ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/independent.hpp
      ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/ad_fun.hpp
-     ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/cast.hpp
      ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/cppad.hpp
-     ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/cppad-scalar.hpp
-     ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/utils/scope.hpp)
+     ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/cppad-scalar.hpp)
 
   IF(PYCCPAD_WITH_CPPAD_CODEGEN)
       LIST(APPEND ${PROJECT_NAME}_HEADERS

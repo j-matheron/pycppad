@@ -6,8 +6,9 @@
 #define __pycppad_ad_hpp__
 
 #include "nanobind/nanobind.h"
-#include "pycppad/cast.hpp"
 #include "pycppad/fwd.hpp"
+#include <nanobind/operators.h>
+#include <nanobind/stl/string.h>
 
 // TODO uncomment when possible with nanobind
 // #include <eigenpy/ufunc.hpp>
@@ -35,6 +36,7 @@ public:
         .def(nb::self /= nb::self)
         .def(nb::self -= nb::self)
         .def(nb::self *= nb::self)
+        .def(-nb::self)
 
         .def("abs_me", &ADType::abs_me)
         .def("acos_me", &ADType::acos_me)
@@ -58,18 +60,18 @@ public:
         .def("expm1_me", &ADType::expm1_me)
         .def("log1p_me", &ADType::log1p_me)
 
-        //.def("__str__",
-        //     [](const ADType &self) {
-        //       std::stringstream ss;
-        //       ss << "AD(" << self << ")";
-        //       return ss.str();
-        //     })
-        //.def("__repr__",
-        //     [](const ADType &self) {
-        //       std::stringstream ss;
-        //       ss << "AD(" << self << ")";
-        //       return ss.str();
-        //     })
+        .def("__str__",
+             [](const ADType &self) {
+               std::stringstream ss;
+               ss << "AD(" << self << ")";
+               return ss.str();
+             })
+        .def("__repr__",
+             [](const ADType &self) -> std::string {
+               std::stringstream ss;
+               ss << "AD(" << self << ")";
+               return ss.str();
+             })
 
         .def("__float__",
              [](const ADType &self) { return ::CppAD::Value(self); })

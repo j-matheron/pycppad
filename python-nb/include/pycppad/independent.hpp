@@ -7,6 +7,7 @@
 
 #include "pycppad/fwd.hpp"
 
+#include "nanobind/nanobind.h"
 #include <cppad/core/independent/independent.hpp>
 
 // TODO uncomment when possible with nanobind
@@ -25,9 +26,8 @@ public:
     m.def(
         name.c_str(),
         [](ADVector &x, const size_t abort_op_index_, bool record_compare_) {
-          ADVector x_(x), dynamic(0);
-          ::CppAD::Independent(x_, abort_op_index_, record_compare_, dynamic);
-          return x_;
+          ADVector dynamic(0);
+          ::CppAD::Independent(x, abort_op_index_, record_compare_, dynamic);
         },
         nb::arg("x"), nb::arg("abort_op_index") = 0,
         nb::arg("record_compare") = true, "Define a variable as Independent.");

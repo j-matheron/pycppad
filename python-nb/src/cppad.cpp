@@ -10,9 +10,10 @@
 // too much memory on Windows
 typedef ::CppAD::AD<double> ADScalar;
 
-// TODO uncomment when possible with nanobind
-// extern template void eigenpy::exposeType<ADScalar>();
-// extern template void eigenpy::exposeType<ADScalar, Eigen::RowMajor>();
+using ADScalar_d = ::CppAD::AD<double>;
+using ADVector_d = std::vector<ADScalar_d>;
+
+NB_MAKE_OPAQUE(ADVector_d);
 
 namespace pycppad {
 

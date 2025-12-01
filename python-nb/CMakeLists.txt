@@ -25,8 +25,6 @@ TARGET_INCLUDE_DIRECTORIES(${PROJECT_NAME} INTERFACE $<INSTALL_INTERFACE:include
 SET(${PYTHON_LIB_NAME_V2}_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/src/cppad.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/src/expose-type-double.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/src/expose-type-double-row-major.cpp
 )
 
 nanobind_add_module(${PYTHON_LIB_NAME_V2} ${${PYTHON_LIB_NAME_V2}_SOURCES})

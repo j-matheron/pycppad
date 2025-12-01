@@ -9,17 +9,9 @@
 #include "pycppad/deprecated.hpp"
 #include "pycppad/warning.hpp"
 
-#include <nanobind/nanobind.h>
-#include <nanobind/operators.h>
-#include <nanobind/stl/vector.h>
-
 // TODO uncomment when possible with nanobind
-// #include <Eigen/Core>
+// #include <Eigen/Core>enablePyCppAD
 #include <cppad/cppad.hpp>
-
-#define DEF_RW_CLASS_ATTRIB(cls_name, name) def_rw(#name, &cls_name::name)
-#define DEF_RO_CLASS_ATTRIB(cls_name, name) def_ro(#name, &cls_name::name)
-#define DEF_CLASS_FUNC(cls_name, name) def(#name, &cls_name::name)
 
 #ifndef PYCPPAD_EXCLUDE_EIGEN_NUMTRAITS_SPECIALIZATION
 
