@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 INRIA
+ * Copyright 2025 INRIA
  */
 
 #ifndef __pycppad_fwd_hpp__

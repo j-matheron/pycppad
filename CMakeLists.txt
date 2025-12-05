@@ -126,9 +126,8 @@ if(PYCPPAD_WITH_NANOBIND)
      ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/ad_fun.hpp
      ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/cast.hpp
      ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/cppad.hpp
-     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/cppad-scalar.hpp
-     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/utils/scope.hpp)
-
+     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/cppad-scalar.hpp)
+      
   # add associated subidirectory
   add_subdirectory(python-nb)
 endif()

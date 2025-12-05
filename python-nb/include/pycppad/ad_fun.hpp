@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 INRIA
+ * Copyright 2025 INRIA
  */
 
 #ifndef __pycppad_ad_fun_hpp__
@@ -7,7 +7,6 @@
 
 #include "nanobind/nanobind.h"
 #include "pycppad/fwd.hpp"
-#include <cstddef>
 #include <nanobind/stl/vector.h>
 
 namespace pycppad {
@@ -20,10 +19,10 @@ template <typename Scalar> class ADFun {
   // typedef Eigen::Ref<ADVector> RefADVector;
   // typedef Eigen::Matrix<Scalar, Eigen::Dynamic, 1> Vector;
 
-  typedef ::CppAD::AD<Scalar> ADScalar;
-  typedef ::CppAD::ADFun<Scalar> ADFunType;
-  typedef std::vector<ADScalar> ADVector;
-  typedef std::vector<Scalar> Vector;
+  using ADScalar = ::CppAD::AD<Scalar>;
+  using ADFunType = ::CppAD::ADFun<Scalar>;
+  using ADVector = std::vector<ADScalar>;
+  using Vector = std::vector<Scalar>;
 
 public:
   static Vector Forward_multiple(ADFunType &f, size_t q, const Vector &xq) {
@@ -42,10 +41,7 @@ public:
         .def(
             "__init__",
             [](ADFunType *self, ADVector &x, ADVector &y) {
-              ADVector x_(x), y_(y);
-              new (self) ADFunType(x_, y_);
-              x = x_;
-              y = y_;
+              new (self) ADFunType(x, y);
             },
             nb::arg("x"), nb::arg("y"))
         .def("from_json", &ADFunType::from_json, nb::arg("json"))

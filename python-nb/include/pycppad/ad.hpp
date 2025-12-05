@@ -1,11 +1,12 @@
 /*
- * Copyright 2021 INRIA
+ * Copyright 2025 INRIA
  */
 
 #ifndef __pycppad_ad_hpp__
 #define __pycppad_ad_hpp__
 
 #include "nanobind/nanobind.h"
+#include "pycppad/cast.hpp"
 #include "pycppad/fwd.hpp"
 #include <nanobind/operators.h>
 #include <nanobind/stl/string.h>
@@ -19,7 +20,7 @@ namespace nb = nanobind;
 
 template <typename Scalar> class AD {
 public:
-  typedef ::CppAD::AD<Scalar> ADType;
+  using ADType = ::CppAD::AD<Scalar>;
 
 public:
   static void expose(nb::module_ &m, const std::string &class_name = "AD") {
@@ -75,9 +76,7 @@ public:
 
         .def("__float__",
              [](const ADType &self) { return ::CppAD::Value(self); })
-        .def("__int__", [](const ADType &self) {
-          return static_cast<int64_t>(::CppAD::Value(self));
-        });
+        .def("__int__", &internal::Cast<ADType, int64_t>::run);
 
     m.def(
         "Value", [](const ADType &x) { return ::CppAD::Value(x); },

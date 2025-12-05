@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 INRIA
+ * Copyright 2025 INRIA
  */
 
 #ifndef __pycppad_cppad_scalar_hpp__
@@ -31,9 +31,9 @@ template <typename Scalar> void exposeCppADScalar(nb::module_ &m) {
 
   nb::bind_vector<ADVector>(m, "ADVector");
 
-  pycppad::AD<Scalar>::expose(m);
-  pycppad::ADFun<Scalar>::expose(m);
-  pycppad::Independent<ADVector>::expose(m);
+  AD<Scalar>::expose(m);
+  ADFun<Scalar>::expose(m);
+  Independent<ADVector>::expose(m);
 }
 } // namespace pycppad
 
