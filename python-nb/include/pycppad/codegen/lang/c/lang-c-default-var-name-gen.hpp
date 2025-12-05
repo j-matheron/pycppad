@@ -6,6 +6,7 @@
 
 #include <cppad/cg/lang/c/lang_c_default_var_name_gen.hpp>
 #include <nanobind/nanobind.h>
+#include <string>
 
 namespace pycppad {
 namespace codegen {

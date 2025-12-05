@@ -21,7 +21,7 @@ template <typename Scalar> struct CppADValue {
 };
 
 template <typename Scalar, typename To> struct Cast<::CppAD::AD<Scalar>, To> {
-  typedef ::CppAD::AD<Scalar> From;
+  using From = ::CppAD::AD<Scalar>;
   static To run(const From &from) {
     return static_cast<To>(CppADValue<Scalar>::get(from));
   }

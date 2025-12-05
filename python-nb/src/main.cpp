@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 INRIA
+ * Copyright 2025 INRIA
  */
 
 // TODO uncomment when possible with nanobind
@@ -7,9 +7,7 @@
 // #include <eigenpy/eigenpy.hpp>
 
 #include "pycppad/cppad.hpp"
-
 #include <nanobind/nanobind.h>
-
 #include <nanobind/stl/string.h>
 
 NB_MODULE(pycppad_pywrap_nb, m) {

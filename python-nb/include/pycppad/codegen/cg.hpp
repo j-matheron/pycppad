@@ -57,7 +57,10 @@ public:
         .def(nb::self * nb::self)
         .def(nb::self / nb::self)
         .def(nb::self += nb::self)
+        .def(nb::self -= nb::self)
         .def(nb::self *= nb::self)
+        .def(nb::self /= nb::self)
+        .def(-nb::self)
 
         .def("value", [](const CGType &self) { return self.getValue(); })
 

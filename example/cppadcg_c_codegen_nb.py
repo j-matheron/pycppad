@@ -18,10 +18,7 @@ from pycppad import (
 # independent variable vector
 n = 2
 
-x = ADCGVector()
-
-x.append(ADCG(CG(2.0)))
-x.append(ADCG(CG(3.0)))
+x = ADCGVector([ADCG(CG(2.0)), ADCG(CG(2.0))])
 
 Independent(x)
 

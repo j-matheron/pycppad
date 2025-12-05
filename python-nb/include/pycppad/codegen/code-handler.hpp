@@ -47,6 +47,7 @@ public:
         .def("setReuseVariableIDs", &CodeHandlerType::setReuseVariableIDs,
              nb::arg("reuse"))
         .def("isReuseVariableIDs", &CodeHandlerType::isReuseVariableIDs)
+
         .def(
             "makeVariable",
             [](CodeHandlerType &self, CG &variable) {
@@ -92,8 +93,6 @@ public:
         .def("getMaximumVariableID", &CodeHandlerType::getMaximumVariableID)
         .def("isVerbose", &CodeHandlerType::isVerbose)
         .def("setVerbose", &CodeHandlerType::setVerbose)
-        //.def("getJobTimer", &CodeHandler::getJobTimer)
-        //.def("setJobTimer", &CodeHandler::setJobTimer, nb::args("jobTimer"))
         .def("isZeroDependents", &CodeHandlerType::isZeroDependents)
         .def("setZeroDependents", &CodeHandlerType::setZeroDependents,
              nb::arg("zeroDependents"))
@@ -108,10 +107,7 @@ public:
              "Provides the name used by an atomic function with a given ID.\n"
              "Parameters:\n"
              "\tid:  the atomic function ID.")
-        //.def("getExternalFuncMaxForwardOrder",
-        //&CodeHandler::getExternalFuncMaxForwardOrder)
-        //.def("getExternalFuncMaxReverseOrder",
-        //&CodeHandler::getExternalFuncMaxReverseOrder)
+
         .def(
             "generateCode",
             [](CodeHandlerType &self, LanguageC &lang, CGVector &dependent,
