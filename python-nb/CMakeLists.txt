@@ -29,11 +29,6 @@ SET(${PYTHON_LIB_NAME_V2}_SOURCES
 
 nanobind_add_module(${PYTHON_LIB_NAME_V2} ${${PYTHON_LIB_NAME_V2}_SOURCES})
 
-#target_compile_definitions(
- # ${PYTHON_LIB_NAME_V2}
- # PRIVATE COAL_PYTHON_LIBNAME=${PYTHON_LIB_NAME_V2}
-#)
-
 # target_include_directories
 target_include_directories(${PYTHON_LIB_NAME_V2} PRIVATE  
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
@@ -42,6 +37,16 @@ target_include_directories(${PYTHON_LIB_NAME_V2} PRIVATE
 # link with project interface  
 TARGET_LINK_LIBRARIES(
  ${PYTHON_LIB_NAME_V2} PUBLIC ${PROJECT_NAME})
+
+ IF(PYCCPAD_WITH_CPPAD_CODEGEN)
+# link with target interface
+ TARGET_INCLUDE_DIRECTORIES(${PROJECT_NAME}
+    SYSTEM INTERFACE 
+        $<BUILD_INTERFACE:${cppadcg_INCLUDE_DIR}>
+    )
+  TARGET_LINK_LIBRARIES(${PROJECT_NAME} INTERFACE ${CMAKE_DL_LIBS})
+  TARGET_COMPILE_DEFINITIONS(${PYTHON_LIB_NAME_V2} PRIVATE PYCPPAD_WITH_CPPAD_CODEGEN_BINDINGS)
+ENDIF()
 
 # BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS spews conversion warnings from int to long unsigned int.
 # Unfortunately, using literals does not work in a macro. As such, this turns them off for the entire wrapper:

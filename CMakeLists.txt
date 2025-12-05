@@ -111,22 +111,31 @@ LIST(APPEND (${PROJECT_NAME}_HEADERS
     ${${PROJECT_NAME}_BINARY_DIR}/include/${PROJECT_NAME}/warning.hpp)
 )
 
-if(PYCPPAD_WITH_NANOBIND)
+IF(PYCPPAD_WITH_NANOBIND)
   # find python for binding
-  find_package(Python 3.8 REQUIRED COMPONENTS Interpreter Development.Module)
+  FIND_PACKAGE(Python 3.8 REQUIRED COMPONENTS Interpreter Development.Module)
 
   # jrl-cmakemodules use PYTHON_EXECUTABLE defined in FINDPYTHON macro.
   # Since we doesn't call it in this branch, we must redefine it.
-  set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
+  SET(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 
-    SET(${PROJECT_NAME}_HEADERS
-     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/fwd.hpp
-     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/ad.hpp
-     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/independent.hpp
-     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/ad_fun.hpp
-     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/cast.hpp
-     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/cppad.hpp
-     ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/cppad-scalar.hpp)
+  SET(${PROJECT_NAME}_HEADERS
+   ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/fwd.hpp
+   ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/ad.hpp
+   ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/independent.hpp
+   ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/ad_fun.hpp
+   ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/cast.hpp
+   ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/cppad.hpp
+   ${PROJECT_SOURCE_DIR}/python-nb/include/${PROJECT_NAME}/cppad-scalar.hpp)
+
+  IF(PYCCPAD_WITH_CPPAD_CODEGEN)
+    LIST(APPEND ${PROJECT_NAME}_HEADERS
+    ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/codegen/cg.hpp
+    ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/codegen/cppadcg-scalar.hpp
+    ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/codegen/code-handler.hpp
+    ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/codegen/lang/c/language-c.hpp
+    ${PROJECT_SOURCE_DIR}/python/include/${PROJECT_NAME}/codegen/lang/c/lang-c-default-var-name-gen.hpp)
+  ENDIF()
       
   # add associated subidirectory
   add_subdirectory(python-nb)
