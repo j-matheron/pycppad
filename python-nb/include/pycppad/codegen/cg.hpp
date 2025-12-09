@@ -7,9 +7,8 @@
 
 #include <cppad/cg/cppadcg.hpp>
 #include <nanobind/nanobind.h>
-#include <nanobind/operators.h>
-#include <nanobind/stl/string.h>
 
+#include "pycppad/binding_core.hpp"
 #include "pycppad/cast.hpp"
 
 namespace pycppad {
@@ -23,7 +22,7 @@ template <typename Scalar> struct CppADValue<::CppAD::cg::CG<Scalar>> {
 
 template <typename Scalar, typename To>
 struct Cast<::CppAD::cg::CG<Scalar>, To> {
-  typedef ::CppAD::cg::CG<Scalar> From;
+  using From = ::CppAD::cg::CG<Scalar>;
   static To run(const From &from) {
     return static_cast<To>(::CppAD::Value<From>(from).getValue());
   }

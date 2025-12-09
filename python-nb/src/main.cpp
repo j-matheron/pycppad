@@ -8,7 +8,8 @@
 
 #include "pycppad/cppad.hpp"
 #include <nanobind/nanobind.h>
-#include <nanobind/stl/string.h>
+
+#include "pycppad/binding_core.hpp"
 
 NB_MODULE(pycppad_pywrap_nb, m) {
   m.attr("__version__") = std::string(PYCPPAD_VERSION);

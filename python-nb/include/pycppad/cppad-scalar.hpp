@@ -8,7 +8,8 @@
 #include "pycppad/ad.hpp"
 #include "pycppad/ad_fun.hpp"
 #include "pycppad/independent.hpp"
-#include <nanobind/stl/bind_vector.h>
+
+#include "pycppad/binding_core.hpp"
 
 // TODO uncomment when possible with nanobind
 // #include <eigenpy/eigenpy.hpp>

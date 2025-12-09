@@ -5,9 +5,10 @@
 #ifndef __pycppad_ad_fun_hpp__
 #define __pycppad_ad_fun_hpp__
 
-#include "nanobind/nanobind.h"
+#include <nanobind/nanobind.h>
+
+#include "pycppad/binding_core.hpp"
 #include "pycppad/fwd.hpp"
-#include <nanobind/stl/vector.h>
 
 namespace pycppad {
 namespace nb = nanobind;

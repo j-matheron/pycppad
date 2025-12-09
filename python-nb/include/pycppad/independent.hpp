@@ -5,10 +5,11 @@
 #ifndef __pycppad_independent_hpp__
 #define __pycppad_independent_hpp__
 
-#include "pycppad/fwd.hpp"
-
-#include "nanobind/nanobind.h"
 #include <cppad/core/independent/independent.hpp>
+#include <nanobind/nanobind.h>
+
+#include "pycppad/binding_core.hpp"
+#include "pycppad/fwd.hpp"
 
 // TODO uncomment when possible with nanobind
 // #include <eigenpy/eigenpy.hpp>

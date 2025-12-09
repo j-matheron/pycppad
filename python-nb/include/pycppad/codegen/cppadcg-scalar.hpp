@@ -6,6 +6,7 @@
 #define __pycppad_cppad_codegen_cppadcg_scalar_hpp__
 
 #include <cppad/cg/cppadcg.hpp>
+#include <nanobind/nanobind.h>
 
 #include "pycppad/codegen/cg.hpp"
 #include "pycppad/codegen/code-handler.hpp"
@@ -15,7 +16,8 @@
 #include "pycppad/ad.hpp"
 #include "pycppad/ad_fun.hpp"
 #include "pycppad/independent.hpp"
-#include <nanobind/stl/bind_vector.h>
+
+#include "pycppad/binding_core.hpp"
 
 namespace pycppad {
 namespace codegen {

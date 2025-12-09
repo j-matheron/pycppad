@@ -4,12 +4,15 @@
 #ifndef __pycppad_codegen_code_handler_hpp__
 #define __pycppad_codegen_code_handler_hpp__
 
+#include <cppad/cg/cppadcg.hpp>
 #include <nanobind/nanobind.h>
 
-#include "pycppad/codegen/cg.hpp"
 #include <cppad/cg/code_handler.hpp>
 #include <cppad/cg/lang/c/lang_c_default_var_name_gen.hpp>
 #include <cppad/cg/lang/c/language_c.hpp>
+
+#include "pycppad/binding_core.hpp"
+#include "pycppad/codegen/cg.hpp"
 
 namespace pycppad {
 namespace codegen {

@@ -5,11 +5,11 @@
 #ifndef __pycppad_ad_hpp__
 #define __pycppad_ad_hpp__
 
-#include "nanobind/nanobind.h"
+#include <nanobind/nanobind.h>
+
+#include "pycppad/binding_core.hpp"
 #include "pycppad/cast.hpp"
 #include "pycppad/fwd.hpp"
-#include <nanobind/operators.h>
-#include <nanobind/stl/string.h>
 
 // TODO uncomment when possible with nanobind
 // #include <eigenpy/ufunc.hpp>
